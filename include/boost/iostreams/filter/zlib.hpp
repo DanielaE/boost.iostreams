@@ -35,7 +35,7 @@
 // Must come last.
 #ifdef BOOST_MSVC
 # pragma warning(push)
-# pragma warning(disable:4251 4231 4660)         // Dependencies not exported.
+# pragma warning(disable:4251 4231 4660 4275)         // Dependencies not exported.
 #endif
 #include <boost/config/abi_prefix.hpp>           
 
@@ -385,7 +385,8 @@ bool zlib_decompressor_impl<Alloc>::filter
     int result = xinflate(zlib::sync_flush);
     after(src_begin, dest_begin, false);
     zlib_error::check BOOST_PREVENT_MACRO_SUBSTITUTION(result);
-    return !(eof_ = result == zlib::stream_end);
+    eof_ = result == zlib::stream_end;
+    return !eof_;
 }
 
 template<typename Alloc>

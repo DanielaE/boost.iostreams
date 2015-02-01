@@ -27,7 +27,7 @@ public:
     {
         std::streamsize result = (std::min)(n, end_ - ptr_);
         BOOST_IOSTREAMS_CHAR_TRAITS(char_type)::copy
-            (s, buf_ + ptr_, result);
+            (s, buf_ + ptr_, static_cast<std::size_t>(result));
         ptr_ += result;
         return result;
     }
@@ -49,7 +49,7 @@ public:
     {
         std::streamsize result = (std::min)(n, end_ - ptr_);
         BOOST_IOSTREAMS_CHAR_TRAITS(char_type)::copy
-            (buf_ + ptr_, s, result);
+            (buf_ + ptr_, s, static_cast<std::size_t>(result));
         ptr_ += result;
         return result;
     }

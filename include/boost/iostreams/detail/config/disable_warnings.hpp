@@ -18,6 +18,7 @@
 # pragma warning(disable:4706)    // Assignment within conditional expression.
 # if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
 #  pragma warning(disable:6334)   // sizeof applied to an expression with an operator.
+#  pragma warning(disable:4702)   // unreachable code.
 # endif
 #else
 # if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
