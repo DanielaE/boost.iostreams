@@ -31,6 +31,11 @@
 #include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_same.hpp>
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4251) // class needs to have dll-interface to be used by clients of class
+#endif
+
 // Must come last.
 #if defined(BOOST_MSVC)
 # pragma warning(push)
@@ -601,6 +606,10 @@ operator^=(mapped_file::mapmode& a, mapped_file::mapmode b)
 #include <boost/config/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 #if defined(BOOST_MSVC)
 # pragma warning(pop)  // pops #pragma warning(disable:4251)
+#endif
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
 #endif
 
 #endif // #ifndef BOOST_IOSTREAMS_MAPPED_FILE_HPP_INCLUDED

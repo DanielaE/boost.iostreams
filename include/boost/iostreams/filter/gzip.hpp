@@ -47,6 +47,7 @@
 # pragma warning(disable:4244)    // Possible truncation
 # pragma warning(disable:4251)    // Missing DLL interface for std::string
 # pragma warning(disable:4309)    // Truncation of constant value.
+# pragma warning(disable: 4251)    // class needs to have dll-interface to be used by clients of class
 #endif
 
 #ifdef BOOST_NO_STDC_NAMESPACE
