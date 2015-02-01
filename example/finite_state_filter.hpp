@@ -314,7 +314,7 @@ public:
                     flags_ |= f_eof;
                     this->on_eof();
                 } else if (!traits_type::would_block(c)) {
-                    this->process_event(c);
+                    this->process_event(static_cast<char>(c));
                 }
             }
 

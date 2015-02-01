@@ -38,7 +38,7 @@ private:
                     false :
                     skip;
             if (!skip)
-                std::cout.put(c);
+                std::cout.put(static_cast<char>(c));
         }
     }
     char comment_char_;
@@ -93,7 +93,7 @@ public:
         if (skip_)
             return true;
 
-        return iostreams::put(dest, c);
+        return iostreams::put(dest, static_cast<char>(c));
     }
 
     template<typename Source>
@@ -139,7 +139,7 @@ public:
         if (skip_)
             return true;
 
-        return iostreams::put(dest, c);
+        return iostreams::put(dest, static_cast<char>(c));
     }
 
     template<typename Device>
@@ -173,7 +173,7 @@ public:
                 if (!skip_)
                     break;
             }
-            s[z] = c;
+            s[z] = static_cast<char>(c);
         }
         return n;
     }
@@ -204,7 +204,7 @@ public:
                     skip_;
             if (skip_)
                 continue;
-            if (!iostreams::put(dest, c))
+            if (!iostreams::put(dest, static_cast<char>(c)))
                 break;
         }
         return z;
