@@ -27,6 +27,11 @@
 #include <boost/iostreams/positioning.hpp>
 #include <boost/shared_ptr.hpp>
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4251) // class needs to have dll-interface to be used by clients of class
+#endif
+
 // Must come last.
 #if defined(BOOST_MSVC)
 # pragma warning(push)
@@ -320,6 +325,10 @@ private:
 #include <boost/config/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 #if defined(BOOST_MSVC)
 # pragma warning(pop)  // pops #pragma warning(disable:4251)
+#endif
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
 #endif
 
 #endif // #ifndef BOOST_IOSTREAMS_FILE_DESCRIPTOR_HPP_INCLUDED

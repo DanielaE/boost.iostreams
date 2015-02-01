@@ -64,6 +64,11 @@
     chain.component< target >( index ) \
     /**/
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 namespace boost { namespace iostreams {
 
 //--------------Definition of chain and wchain--------------------------------//
@@ -209,6 +214,10 @@ public:
     void reset();
 
     //----------Additional i/o functions--------------------------------------//
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
 
     // Returns true if this chain is non-empty and its final link
     // is a source or sink, i.e., if it is ready to perform i/o.
@@ -270,6 +279,10 @@ private:
         if (prev) prev->set_next(list().back());
         notify();
     }
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
     list_type& list() { return pimpl_->links_; }
     const list_type& list() const { return pimpl_->links_; }
@@ -590,5 +603,9 @@ void chain_base<Self, Ch, Tr, Alloc, Mode>::pop()
 } // End namespace detail.
 
 } } // End namespaces iostreams, boost.
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_CHAIN_HPP_INCLUDED

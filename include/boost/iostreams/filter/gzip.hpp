@@ -47,6 +47,7 @@
 # pragma warning(disable:4244)    // Possible truncation
 # pragma warning(disable:4251)    // Missing DLL interface for std::string
 # pragma warning(disable:4309)    // Truncation of constant value.
+# pragma warning(disable: 4251)    // class needs to have dll-interface to be used by clients of class
 #endif
 
 #ifdef BOOST_NO_STDC_NAMESPACE
@@ -402,6 +403,8 @@ class basic_gzip_decompressor : basic_zlib_decompressor<Alloc> {
 private:
     typedef basic_zlib_decompressor<Alloc>   base_type;
     typedef typename base_type::string_type  string_type;
+
+    basic_gzip_decompressor& operator=(const basic_gzip_decompressor&);
 public:
     typedef char char_type;
     struct category
@@ -425,7 +428,7 @@ public:
             }
             if (state_ == s_header) {
                 int c = s[result++];
-                header_.process(c);
+                header_.process(static_cast<char>(c));
                 if (header_.done())
                     state_ = s_body;
             } else if (state_ == s_body) {
@@ -450,7 +453,7 @@ public:
                     state_ = s_start;
                 } else {
                     int c = s[result++];
-                    footer_.process(c);
+                    footer_.process(static_cast<char>(c));
                 }
             }
         }
@@ -460,7 +463,7 @@ public:
     template<typename Source>
     std::streamsize read(Source& src, char_type* s, std::streamsize n)
     {
-        typedef char_traits<char>  traits_type;
+        typedef char_traits<char>  traits_t;
         std::streamsize            result = 0;
         peekable_source<Source>    peek(src, putback_);
         while (result < n && state_ != s_done) {
@@ -471,12 +474,12 @@ public:
             }
             if (state_ == s_header) {
                 int c = boost::iostreams::get(peek);
-                if (traits_type::is_eof(c)) {
+                if (traits_t::is_eof(c)) {
                     boost::throw_exception(gzip_error(gzip::bad_header));
-                } else if (traits_type::would_block(c)) {
+                } else if (traits_t::would_block(c)) {
                     break;
                 }
-                header_.process(c);
+                header_.process(static_cast<char>(c));
                 if (header_.done())
                     state_ = s_body;
             } else if (state_ == s_body) {
@@ -496,20 +499,20 @@ public:
                 }
             } else { // state_ == s_footer
                 int c = boost::iostreams::get(peek);
-                if (traits_type::is_eof(c)) {
+                if (traits_t::is_eof(c)) {
                     boost::throw_exception(gzip_error(gzip::bad_footer));
-                } else if (traits_type::would_block(c)) {
+                } else if (traits_t::would_block(c)) {
                     break;
                 }
-                footer_.process(c);
+                footer_.process(static_cast<char>(c));
                 if (footer_.done()) {
                     if (footer_.crc() != this->crc())
                         boost::throw_exception(gzip_error(gzip::bad_crc));
                     c = boost::iostreams::get(peek);
-                    if (traits_type::is_eof(c)) {
+                    if (traits_t::is_eof(c)) {
                         state_ = s_done;
                     } else {
-                        peek.putback(c);
+                        peek.putback(static_cast<char>(c));
                         base_type::close(peek, BOOST_IOS::in);
                         state_ = s_start;
                         header_.reset();
@@ -580,7 +583,7 @@ private:
             if (offset_ < pbsize) {
                 result = (std::min)(n, pbsize - offset_);
                 BOOST_IOSTREAMS_CHAR_TRAITS(char)::copy(
-                    s, putback_.data() + offset_, result);
+                    s, putback_.data() + static_cast<size_t>(offset_), static_cast<size_t>(result));
                 offset_ += result;
                 if (result == n)
                     return result;
@@ -596,7 +599,7 @@ private:
         bool putback(char c)
         {
             if (offset_) {
-                putback_[--offset_] = c;
+                putback_[static_cast<size_t>(--offset_)] = c;
             } else {
                 boost::throw_exception(
                     boost::iostreams::detail::bad_putback());
@@ -605,7 +608,7 @@ private:
         }
         void putback(const string_type& s)
         {
-            putback_.replace(0, offset_, s);
+            putback_.replace(0, static_cast<size_t>(offset_), s);
             offset_ = 0;
         }
 
@@ -618,11 +621,13 @@ private:
         // Returns the sequence of characters that have been put back but not re-read.
         string_type unconsumed_input() const
         {
-            return string_type(putback_, offset_, putback_.size() - offset_);
+            return string_type(putback_, static_cast<size_t>(offset_), putback_.size() - static_cast<size_t>(offset_));
         }
         Source&          src_;
         string_type      putback_;
         std::streamsize  offset_;
+    private:
+        peekable_source& operator=(const peekable_source&);
     };
 
     enum state_type {
@@ -718,7 +723,7 @@ std::streamsize basic_gzip_compressor<Alloc>::read_string
     std::copy( str.data() + offset_,
                str.data() + offset_ + amt,
                s );
-    offset_ += amt;
+    offset_ += static_cast<size_t>(amt);
     if ( !(flags_ & f_header_done) &&
          offset_ == static_cast<std::size_t>(str.size()) )
     {

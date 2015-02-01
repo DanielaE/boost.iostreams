@@ -97,11 +97,11 @@ std::streamsize copy_impl( Source& src, Sink& snk,
 {
     typedef typename char_type_of<Source>::type  char_type;
     typedef std::pair<char_type*, char_type*>    pair_type;
-    detail::basic_buffer<char_type>  buf(buffer_size);
+    detail::basic_buffer<char_type>  buf(static_cast<int>(buffer_size));
     pair_type                        p = snk.output_sequence();
     std::streamsize                  total = 0;
     std::ptrdiff_t                   capacity = p.second - p.first;
-    while (true) {
+    for (;;) {
         std::streamsize amt = 
             iostreams::read(
                 src, 
@@ -125,7 +125,7 @@ std::streamsize copy_impl( Source& src, Sink& snk,
                            mpl::false_, mpl::false_ )
 { 
     typedef typename char_type_of<Source>::type char_type;
-    detail::basic_buffer<char_type>  buf(buffer_size);
+    detail::basic_buffer<char_type>  buf(static_cast<int>(buffer_size));
     non_blocking_adapter<Sink>       nb(snk);
     std::streamsize                  total = 0;
     bool                             done = false;

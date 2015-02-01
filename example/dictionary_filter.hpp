@@ -19,6 +19,11 @@
 #include <boost/iostreams/filter/stdio.hpp>
 #include <boost/iostreams/operations.hpp>
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std {
     using ::isalpha;
@@ -44,6 +49,8 @@ class dictionary_stdio_filter : public stdio_filter {
 public:
     dictionary_stdio_filter(dictionary& d) : dictionary_(d) { }
 private:
+    dictionary_stdio_filter& operator=(const dictionary_stdio_filter&);
+
     void do_filter()
     {
         using namespace std;
@@ -56,9 +63,9 @@ private:
                 current_word_.erase();
                 if (c == EOF)
                     break;
-                cout.put(c);
+                cout.put(static_cast<char>(c));
             } else {
-                current_word_ += c;
+                current_word_ += static_cast<char>(c);
             }
         }
     }
@@ -97,10 +104,10 @@ public:
                     if (c == EOF)
                         eof_ = true;
                     else
-                        current_word_ += c;
+                        current_word_ += static_cast<char>(c);
                     break;
                 } else {
-                    current_word_ += c;
+                    current_word_ += static_cast<char>(c);
                 }
             }
 
@@ -115,6 +122,8 @@ public:
         eof_ = false;
     }
 private:
+    dictionary_input_filter& operator=(const dictionary_input_filter&);
+
     dictionary&             dictionary_;
     std::string             current_word_;
     std::string::size_type  off_;
@@ -138,7 +147,7 @@ public:
             off_ = 0;
         }
 
-        current_word_ += c;
+        current_word_ += static_cast<char>(c);
         return true;
     }
 
@@ -164,6 +173,8 @@ public:
             );
     }
 private:
+    dictionary_output_filter& operator=(const dictionary_output_filter&);
+
     template<typename Sink>
     bool write_current_word(Sink& dest)
     {
@@ -205,7 +216,7 @@ inline void dictionary::replace(std::string& key)
         return;
     string& value = it->second;
     if (!value.empty() && !key.empty() && std::isupper((unsigned char) key[0]))
-        value[0] = std::toupper((unsigned char) value[0]);
+        value[0] = static_cast<char>(std::toupper((unsigned char) value[0]));
     key = value;
     return;
 }
@@ -213,9 +224,13 @@ inline void dictionary::replace(std::string& key)
 inline void dictionary::tolower(std::string& str)
 {
     for (std::string::size_type z = 0, len = str.size(); z < len; ++z)
-        str[z] = std::tolower((unsigned char) str[z]);
+        str[z] = static_cast<char>(std::tolower((unsigned char) str[z]));
 }
 
 } } }       // End namespaces example, iostreams, boost.
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 #endif      // #ifndef BOOST_IOSTREAMS_DICTIONARY_FILTER_HPP_INCLUDED

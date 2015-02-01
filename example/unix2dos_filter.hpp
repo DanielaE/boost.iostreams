@@ -25,7 +25,7 @@ private:
         while ((c = std::cin.get()) != EOF) {
             if (c == '\n')
                 std::cout.put('\r');
-            std::cout.put(c);
+            std::cout.put(static_cast<char>(c));
         }
     }
 };
@@ -70,7 +70,7 @@ public:
                 put_char(dest, '\r') ?
                     this->put(dest, '\n') :
                     false;
-        return iostreams::put(dest, c);
+        return iostreams::put(dest, static_cast<char>(c));
     }
 
     template<typename Sink>
@@ -80,7 +80,7 @@ private:
     bool put_char(Sink& dest, int c)
     {
         bool result;
-        if ((result = iostreams::put(dest, c)) == true) {
+        if ((result = iostreams::put(dest, static_cast<char>(c))) == true) {
             has_linefeed_ =
                 c == '\r' ?
                     true :
