@@ -30,7 +30,7 @@ struct limit_device {
             }
             n /= 2;
         }
-        written += n;
+        written += static_cast<int>(n);
         return n;
     }
 };
