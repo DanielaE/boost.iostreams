@@ -60,6 +60,8 @@ public:
     { return iostreams::optimal_buffer_size(t_); }
 public:
     value_type t_;
+
+    filter_adapter& operator= (const filter_adapter&);
 };
 
 //----------------------------------------------------------------------------//

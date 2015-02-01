@@ -94,6 +94,8 @@ public:
         bool r2 = iostreams::flush(this->component());
         return r1 && r2;
     }
+
+    tee_filter& operator=(const tee_filter&);
 };
 BOOST_IOSTREAMS_PIPABLE(tee_filter, 1)
 
@@ -201,6 +203,8 @@ public:
 private:
     device_value  dev_;
     sink_value    sink_;
+
+    tee_device& operator=(const tee_device&);
 };
 
 template<typename Sink>

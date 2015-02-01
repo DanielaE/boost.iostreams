@@ -44,6 +44,7 @@
 #if defined(BOOST_MSVC)
 # pragma warning(push)
 # pragma warning(disable: 4309)    // Truncation of constant value.
+# pragma warning(disable: 4251)    // class needs to have dll-interface to be used by clients of class
 #endif
 
 #ifdef BOOST_NO_STDC_NAMESPACE
