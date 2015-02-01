@@ -125,7 +125,7 @@ protected:
 
     // How many char objects can I process to get <= max_limit
     // wchar_t objects?
-    virtual int do_length(
+    virtual std::size_t do_length(
         BOOST_IOSTREAMS_CODECVT_CV_QUALIFIER std::mbstate_t &,
         const char * from,
         const char * from_end, 

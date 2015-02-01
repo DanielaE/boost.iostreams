@@ -36,7 +36,7 @@ private:
     void do_close() { col_no_ = 0; }
     void put_char(int c)
     {
-        std::cout.put(c);
+        std::cout.put(static_cast<char>(c));
         if (c != '\n')
             ++col_no_;
         else
@@ -114,7 +114,7 @@ private:
     template<typename Sink>
     bool put_char(Sink& dest, int c)
     {
-        if (!iostreams::put(dest, c))
+        if (!iostreams::put(dest, static_cast<char>(c)))
             return false;
         if (c != '\n')
             ++col_no_;

@@ -26,6 +26,10 @@ using namespace boost::iostreams::test;
 namespace io = boost::iostreams;
 using boost::unit_test::test_suite;     
 
+#ifdef BOOST_MSVC
+# pragma warning(disable: 4309) // truncation of constant value
+#endif
+
 struct gzip_alloc : std::allocator<char> { };
 
 void compression_test()
