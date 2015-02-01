@@ -75,8 +75,8 @@ public:
     template<typename Source>
     std::streamsize read(Source& src, char_type* s, std::streamsize n)
     {
-        typedef detail::counted_array_sink<char_type>  array_sink;
-        typedef composite<filter_ref, array_sink>      filtered_array_sink;
+        typedef detail::counted_array_sink<char_type>  array_sink_t;
+        typedef composite<filter_ref, array_sink_t>    filtered_array_sink;
 
         BOOST_ASSERT((flags() & f_write) == 0);
         if (flags() == 0) {
@@ -84,7 +84,7 @@ public:
             buf().set(0, 0);
         }
 
-        filtered_array_sink snk(filter(), array_sink(s, n));
+        filtered_array_sink snk(filter(), array_sink_t(s, n));
         int_type status;
         for ( status = traits_type::good();
               snk.second().count() < n && status == traits_type::good(); )
@@ -103,8 +103,8 @@ public:
     template<typename Sink>
     std::streamsize write(Sink& dest, const char_type* s, std::streamsize n)
     {
-        typedef detail::counted_array_source<char_type>  array_source;
-        typedef composite<filter_ref, array_source>      filtered_array_source;
+        typedef detail::counted_array_source<char_type>  array_source_t;
+        typedef composite<filter_ref, array_source_t>    filtered_array_source;
 
         BOOST_ASSERT((flags() & f_read) == 0);
         if (flags() == 0) {
@@ -112,7 +112,7 @@ public:
             buf().set(0, 0);
         }
         
-        filtered_array_source src(filter(), array_source(s, n));
+        filtered_array_source src(filter(), array_source_t(s, n));
         for (bool good = true; src.second().count() < n && good; ) {
             buf().fill(src);
             good = buf().flush(dest);

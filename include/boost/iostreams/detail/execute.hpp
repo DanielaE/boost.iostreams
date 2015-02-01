@@ -43,6 +43,11 @@
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/utility/result_of.hpp>
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4702) // unreachable code
+#endif
+
 namespace boost { namespace iostreams { namespace detail {
 
 // Helper for class template execute_traits.
@@ -131,5 +136,9 @@ Op execute_foreach(InIt first, InIt last, Op op)
 }
 
 } } } // End namespaces detail, iostreams, boost.
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_EXECUTE_HPP_INCLUDED
