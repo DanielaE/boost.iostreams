@@ -33,7 +33,7 @@
 // Must come last.
 #ifdef BOOST_MSVC
 # pragma warning(push)
-# pragma warning(disable:4251 4231 4660)
+# pragma warning(disable:4251 4231 4660 4275)
 #endif
 #include <boost/config/abi_prefix.hpp>           
 

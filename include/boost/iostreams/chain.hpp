@@ -210,6 +210,10 @@ public:
     void reset();
 
     //----------Additional i/o functions--------------------------------------//
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
 
     // Returns true if this chain is non-empty and its final link
     // is a source or sink, i.e., if it is ready to perform i/o.
@@ -260,6 +264,10 @@ private:
         if (prev) prev->set_next(list().back());
         notify();
     }
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
     list_type& list() { return pimpl_->links_; }
     const list_type& list() const { return pimpl_->links_; }

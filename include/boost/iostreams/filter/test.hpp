@@ -98,7 +98,7 @@ public:
             return -1;
         streamsize avail = 
             (std::min) (n, static_cast<streamsize>(data_.size() - pos_));
-        streamsize amt = (std::min) (rand(inc_), avail);
+        streamsize amt = (std::min) (rand(static_cast<int>(inc_)), avail);
         if (amt)
             memcpy(s, data_.c_str() + pos_, static_cast<size_t>(amt));
         pos_ += amt;
@@ -126,7 +126,7 @@ public:
         { }
     std::streamsize write(const char* s, std::streamsize n)
     {
-        std::streamsize amt = (std::min) (rand(inc_), n);
+        std::streamsize amt = (std::min) (rand(static_cast<int>(inc_)), n);
         dest_.insert(dest_.end(), s, s + amt);
         return amt;
     }
