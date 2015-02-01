@@ -146,8 +146,8 @@ std::codecvt_base::result utf8_codecvt_facet_wchar_t::do_out(
         int shift_exponent = (cont_octet_count) *   6;
 
         // Process the first character
-        *to++ = octet1_modifier_table[cont_octet_count] +
-            (unsigned char)(*from / (1 << shift_exponent));
+        *to++ = static_cast<char>(octet1_modifier_table[cont_octet_count] +
+            (unsigned char)(*from / (1 << shift_exponent)));
 
         // Process the continuation characters 
         // Invariants: At   the start of the loop:
@@ -177,7 +177,7 @@ std::codecvt_base::result utf8_codecvt_facet_wchar_t::do_out(
 
 // How many char objects can I process to get <= max_limit
 // wchar_t objects?
-int utf8_codecvt_facet_wchar_t::do_length(
+std::size_t utf8_codecvt_facet_wchar_t::do_length(
     BOOST_IOSTREAMS_CODECVT_CV_QUALIFIER std::mbstate_t &,
     const char * from,
     const char * from_end, 

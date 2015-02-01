@@ -118,6 +118,12 @@ lib boost_iostreams
     : $(sources) 
     : <link>shared:<define>BOOST_IOSTREAMS_DYN_LINK=1 
       <define>BOOST_IOSTREAMS_USE_DEPRECATED
+      <toolset>msvc:<cxxflags>/wd4127
+      <toolset>msvc:<cxxflags>/wd4100
+      <toolset>msvc:<cxxflags>/wd4244
+      <toolset>msvc:<cxxflags>/wd4267
+      <toolset>msvc:<cxxflags>/wd4996
+      <toolset>msvc:<cxxflags>/wd4018
       $(zlib-requirements)
       $(bzip2-requirements)
       $(lzma-requirements)

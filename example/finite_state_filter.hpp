@@ -31,6 +31,11 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 namespace boost { namespace iostreams {
 
 //------------------Definition of basic character classes---------------------//
@@ -314,7 +319,7 @@ public:
                     flags_ |= f_eof;
                     this->on_eof();
                 } else if (!traits_type::would_block(c)) {
-                    this->process_event(c);
+                    this->process_event(static_cast<char>(c));
                 }
             }
 
@@ -361,5 +366,9 @@ private:
 };
 
 } }       // End namespaces iostreams, boost.
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 #endif // #ifndef BOOST_IOSTREAMS_FINITE_STATE_FILTER_HPP_INCLUDED
