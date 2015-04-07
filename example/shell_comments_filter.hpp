@@ -19,6 +19,11 @@
 #include <boost/iostreams/filter/stdio.hpp>
 #include <boost/iostreams/operations.hpp>
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 namespace boost { namespace iostreams { namespace example {
 
 class shell_comments_stdio_filter : public stdio_filter {
@@ -218,5 +223,9 @@ private:
 };
 
 } } }       // End namespaces example, iostreams, boost.
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 #endif // #ifndef BOOST_IOSTREAMS_SHELL_COMMENTS_FILTER_HPP_INCLUDED
