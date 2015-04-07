@@ -14,6 +14,11 @@
 #include "detail/constants.hpp"
 #include "detail/temp_file.hpp"
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 using boost::iostreams::test::chunk_size;
 
 bool putback_test_one(std::istream& is)
@@ -163,5 +168,9 @@ void putback_test()
         );
     }
 }
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 #endif // #ifndef BOOST_IOSTREAMS_TEST_PUTBACK_HPP_INCLUDED
