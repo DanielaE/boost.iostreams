@@ -320,7 +320,8 @@ bool bzip2_compressor_impl<Alloc>::filter
     int result = compress(flush ? bzip2::finish : bzip2::run);
     after(src_begin, dest_begin);
     bzip2_error::check BOOST_PREVENT_MACRO_SUBSTITUTION(result);
-    return !(eof_ = result == bzip2::stream_end);
+    eof_ = result == bzip2::stream_end;
+    return !eof_;
 }
 
 template<typename Alloc>
