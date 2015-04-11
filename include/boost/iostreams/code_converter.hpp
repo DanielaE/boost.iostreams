@@ -160,8 +160,7 @@ struct code_converter_impl {
             boost::throw_exception(BOOST_IOSTREAMS_FAILURE("already open"));
         if (buffer_size == -1)
             buffer_size = default_filter_buffer_size;
-        int max_length = cvt_.get().max_length();
-        buffer_size = (std::max)(buffer_size, 2 * max_length);
+        buffer_size = (std::max)(buffer_size, 2 * cvt_.get().max_length());
         if (can_read::value) {
             buf_.first().resize(buffer_size);
             buf_.first().set(0, 0);
