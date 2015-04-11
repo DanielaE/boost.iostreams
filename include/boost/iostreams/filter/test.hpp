@@ -103,7 +103,7 @@ public:
             (std::min) (n, static_cast<std::streamsize>(data_.size() - pos_));
         std::streamsize amt = (std::min) (rand(static_cast<int>(inc_)), avail);
         if (amt)
-            std::memcpy(s, data_.c_str() + pos_, amt);
+            std::memcpy(s, data_.c_str() + pos_, static_cast<size_t>(amt));
         pos_ += amt;
         return amt;
     }
@@ -111,7 +111,7 @@ public:
     bool putback(char c)
     {
         if (pos_ > 0) {
-            data_[--pos_] = c;
+            data_[static_cast<size_t>(--pos_)] = c;
             return true;
         }
         return false;

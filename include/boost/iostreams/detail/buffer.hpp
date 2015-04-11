@@ -98,7 +98,7 @@ public:
         using namespace std;
         std::streamsize keep;
         if ((keep = static_cast<std::streamsize>(eptr_ - ptr_)) > 0)
-            traits_type::move(this->data(), ptr_, keep);
+            traits_type::move(this->data(), ptr_, static_cast<size_t>(keep));
         set(0, keep);
         std::streamsize result = 
             iostreams::read(src, this->data() + keep, this->size() - keep);
@@ -122,7 +122,7 @@ public:
         if (result < amt) {
             traits_type::move( this->data(), 
                                ptr_ + result, 
-                               amt - result );
+                               static_cast<size_t>(amt - result) );
         }
         this->set(0, amt - result);
         return result != 0;
