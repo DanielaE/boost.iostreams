@@ -73,6 +73,11 @@
     /**/
 #endif
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 namespace boost { namespace iostreams {
 
 //--------------Definition of chain and wchain--------------------------------//
@@ -602,5 +607,9 @@ void chain_base<Self, Ch, Tr, Alloc, Mode>::pop()
 } // End namespace detail.
 
 } } // End namespaces iostreams, boost.
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_CHAIN_HPP_INCLUDED

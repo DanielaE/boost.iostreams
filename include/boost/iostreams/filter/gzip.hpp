@@ -280,7 +280,7 @@ private:
         boost::iostreams::put(next, static_cast<char>(0xFF & (n >> 24)));
     }
     template<typename Sink>
-    static void write_long(long n, Sink& next, boost::mpl::false_)
+    static void write_long(long, Sink&, boost::mpl::false_)
     {
     }
     template<typename Sink>
@@ -403,6 +403,8 @@ class basic_gzip_decompressor : basic_zlib_decompressor<Alloc> {
 private:
     typedef basic_zlib_decompressor<Alloc>   base_type;
     typedef typename base_type::string_type  string_type;
+
+    basic_gzip_decompressor& operator=(const basic_gzip_decompressor&);
 public:
     typedef char char_type;
     struct category
@@ -426,7 +428,7 @@ public:
             }
             if (state_ == s_header) {
                 int c = s[result++];
-                header_.process(c);
+                header_.process(static_cast<char>(c));
                 if (header_.done())
                     state_ = s_body;
             } else if (state_ == s_body) {
@@ -451,7 +453,7 @@ public:
                     state_ = s_start;
                 } else {
                     int c = s[result++];
-                    footer_.process(c);
+                    footer_.process(static_cast<char>(c));
                 }
             }
         }
@@ -477,7 +479,7 @@ public:
                 } else if (traits_type::would_block(c)) {
                     break;
                 }
-                header_.process(c);
+                header_.process(static_cast<char>(c));
                 if (header_.done())
                     state_ = s_body;
             } else if (state_ == s_body) {
@@ -502,7 +504,7 @@ public:
                 } else if (traits_type::would_block(c)) {
                     break;
                 }
-                footer_.process(c);
+                footer_.process(static_cast<char>(c));
                 if (footer_.done()) {
                     if (footer_.crc() != this->crc())
                         boost::throw_exception(gzip_error(gzip::bad_crc));
@@ -510,7 +512,7 @@ public:
                     if (traits_type::is_eof(c)) {
                         state_ = s_done;
                     } else {
-                        peek.putback(c);
+                        peek.putback(static_cast<char>(c));
                         base_type::close(peek, BOOST_IOS::in);
                         state_ = s_start;
                         header_.reset();
@@ -624,6 +626,8 @@ private:
         Source&          src_;
         string_type      putback_;
         std::streamsize  offset_;
+    private:
+        peekable_source& operator=(const peekable_source&);
     };
 
     enum state_type {
