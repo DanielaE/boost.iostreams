@@ -28,9 +28,9 @@ using boost::unit_test::test_suite;
 
 struct gzip_alloc : std::allocator<char> {
     gzip_alloc() { }
-    gzip_alloc(const gzip_alloc& other) { }
+    gzip_alloc(const gzip_alloc&) { }
     template<typename T>
-    gzip_alloc(const std::allocator<T>& other) { }
+    gzip_alloc(const std::allocator<T>&) { }
 };
 
 void compression_test()
