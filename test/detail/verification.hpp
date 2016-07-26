@@ -69,7 +69,7 @@ bool compare_streams_in_chunks(BOOST_ISTREAM& first, BOOST_ISTREAM& second)
         std::streamsize amt = first.gcount();
         if ( amt != static_cast<std::streamsize>(second.gcount()) ||
              BOOST_IOSTREAMS_CHAR_TRAITS(BOOST_CHAR)::
-                compare(buf_one, buf_two, amt) != 0 )
+                compare(buf_one, buf_two, static_cast<size_t>(amt)) != 0 )
             return false;
         ++i;
     } while (!first.eof());

@@ -36,9 +36,9 @@ public:
         std::streamsize result = (min)(n, amt);
         if (result != 0) {
             std::copy( container_.begin() + pos_,
-                       container_.begin() + pos_ + result,
+                       container_.begin() + pos_ + static_cast<size_type>(result),
                        s );
-            pos_ += result;
+            pos_ += static_cast<size_type>(result);
             return result;
         } else {
             return -1; // EOF
@@ -93,9 +93,9 @@ public:
         std::streamsize result = (min)(n, amt);
         if (result != 0) {
             std::copy( container_.begin() + pos_,
-                       container_.begin() + pos_ + result,
+                       container_.begin() + pos_ + static_cast<size_type>(result),
                        s );
-            pos_ += result;
+            pos_ += static_cast<size_type>(result);
             return result;
         } else {
             return -1; // EOF
@@ -110,7 +110,7 @@ public:
                 static_cast<std::streamsize>(container_.size() - pos_);
             result = (min)(n, amt);
             std::copy(s, s + result, container_.begin() + pos_);
-            pos_ += result;
+            pos_ += static_cast<size_type>(result);
         }
         if (result < n) {
             container_.insert(container_.end(), s, s + n);
@@ -138,7 +138,7 @@ public:
         if (next < 0 || next >= static_cast<stream_offset>(container_.size()))
             throw BOOST_IOSTREAMS_FAILURE("bad seek offset");
 
-        pos_ = next;
+        pos_ = static_cast<size_type>(next);
         return pos_;
     }
 
