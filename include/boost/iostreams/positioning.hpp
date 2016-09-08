@@ -79,13 +79,21 @@ inline stream_offset position_to_offset(std::streampos pos) { return pos; }
 // which works correctly on platforms where std::fpos_t is an integral type and 
 // platforms where it is a struct
 
+#if defined(_MSC_VER)
+# if _MSC_VER >= 1700
+#   define BOOST_IOSTREAMS_FPOSOFF(fp) static_cast<long long>(fp)
+# else
+#   define BOOST_IOSTREAMS_FPOSOFF(fp) static_cast<long>(fp)
+# endif
+#endif
+
 // Converts a std::fpos_t to a stream_offset
 inline stream_offset fpos_t_to_offset(std::fpos_t pos)
 {
 #  if defined(_POSIX_) || (_INTEGRAL_MAX_BITS >= 64) || defined(__IBMCPP__)
     return pos;
 #  else
-    return _FPOSOFF(pos);
+    return BOOST_IOSTREAMS_FPOSOFF(pos);
 #  endif
 }
 
@@ -104,7 +112,7 @@ inline stream_offset position_to_offset(std::streampos pos)
     return fpos_t_to_offset(streampos_to_fpos_t(pos)) +
         static_cast<stream_offset>(
             static_cast<std::streamoff>(pos) -
-            _FPOSOFF(streampos_to_fpos_t(pos))
+            BOOST_IOSTREAMS_FPOSOFF(streampos_to_fpos_t(pos))
         );
 }
 
